@@ -1,3 +1,7 @@
-config
+# [*****] ist Anfang eines neuen Konfigurationsblocks
+# * steht für beliebige Zeichenfolge / Name des Blocks
+# mit # können beliebige, einzeilige Kommentare eigebaut werden.
+# [ für Block und # als Kommentarzeichen MÜSSEN am Zeilenanfang stehen.
+[config]
 Name: USERNAME
 Pass: PASSWORD
