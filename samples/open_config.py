@@ -1,3 +1,6 @@
+# Datei oeffnen und Werte zeilenweise in Array speichern
+# Es muss bekannt sein, wieviele Werte zur Verfügung gestellt
+# werden
 gelesen = ['config']
 fobj = open("config.dat")
 for line in fobj:
