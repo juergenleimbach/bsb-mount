@@ -1,7 +1,9 @@
 # [*****] ist Anfang eines neuen Konfigurationsblocks
-# * steht fÃ¼r beliebige Zeichenfolge / Name des Blocks
-# mit # kÃ¶nnen beliebige, einzeilige Kommentare eigebaut werden.
-# [ fÃ¼r Block und # als Kommentarzeichen MÃœSSEN am Zeilenanfang stehen.
+# * steht für beliebige Zeichenfolge / Name des Blocks
+# mit # können beliebige, einzeilige Kommentare eigebaut werden.
+# [ für Block und # als Kommentarzeichen MÜSSEN am Zeilenanfang stehen.
+# wird onfig.dat manuell bearbeitet, muss beim Speichern ansi als
+# Codierung ausgewählt werden. (empfohlener Editor: Notepad++)
 [config]
 Name: USERNAME
 Pass: PASSWORD
