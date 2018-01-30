@@ -1,13 +1,46 @@
 # Initialisieren der grafischen Elemente
 from tkinter import *
+import base64
+import time
 
 # Funktion zum Speichern der eingegebenen Werte in einer Datei
 # (bisher: print als ersatz)
 # Wird innerhalb der Funktion liesein() aufgerufen,
 # liesein() wird hier nicht beendet
 def config_speichern(sichern):
-   for i in range(len(sichern)):
-      print((sichern[i].get()))
+   file = '../config/config.dat'
+   oeffne = open(file,"w")
+   werte = []
+   for zeile in range(len(sichern)):
+      werte.append(sichern[zeile].get())
+      print (werte[zeile])
+      if zeile == 0:
+         oeffne.write("["+werte[zeile]+"]\n")
+      elif zeile == 2:
+         werte[zeile] = werte[zeile].encode('utf-8')
+         werte[zeile] = base64.b64encode(werte[zeile])
+         werte[zeile] = werte[zeile].decode('utf-8')
+         oeffne.write(werte[zeile] +'\n')
+#         cr = base64.b64decode(cr)
+#         print (cr)
+#         cr = cr.decode('utf-8')
+#         print (cr)
+      else:
+         oeffne.write(werte[zeile]+"\n")
+
+   oeffne.close()
+   
+def config_lesen():
+    file = '../config/config.dat'
+    oeffne = open(file)
+    werte = []
+    zeilenzaehler = 0
+    for zeile in oeffne:
+      werte.append(zeile.strip())
+      print (werte[zeilenzaehler])
+      zeilenzaehler = zeilenzaehler + 1
+    oeffne.close()
+    return (werte)
 
 # Funktion zum Einlesen der Werte in einem Fenster
 # Grafische Oberfläche: Tkinter
@@ -15,7 +48,7 @@ def liesein():
 # Fenster erzeugen
    master = Tk()
 # ueber der Array beschriftung wird die erste Zeile definiert
-   beschriftung = ['Vorname', 'Nachname', 'Passwort', 'Configuration']
+   beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
 # Initialisierung lokaler Array: eingabefelder
    eingabefeld = []
    for i in range(len(beschriftung)):
@@ -29,9 +62,9 @@ def liesein():
 # Zweiter Button: speichern sichert eingegebene Werte in der Konfigurationsdatei
 # Funktionsaufruf lesen
 # Aufruf noch offen - füllt Tabelle mit einer vorgegebenen Konfiguration
-   Button(master, text='lesen',
-             command=(lambda ein=eingabefeld:
-                      config_speichern(ein))).grid(row=i+1,column=1)
+   Button(master, text='lesen', command=config_lesen).grid(row=i+1,column=1)
+#             command=(lambda ein=eingabefeld:
+#                      config_speichern(ein))).grid(row=i+1,column=1)
 # Funktionsaufruf: config_speichern
 # Aufruf über lambda, damit die Werte der Eingabefelder übergeben werden können
    Button(master, text='speichern',
@@ -43,5 +76,5 @@ def liesein():
 weiter = liesein()
 
 print("am ende")
-#for i in range(len(weiter)):
-#   print((weiter[i].get()))
+for i in range(len(weiter)):
+   print((weiter[i].get()))
