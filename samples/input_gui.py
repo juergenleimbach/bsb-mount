@@ -13,20 +13,19 @@ def config_speichern(sichern):
    werte = []
    for zeile in range(len(sichern)):
       werte.append(sichern[zeile].get())
-      print (werte[zeile])
+#      print (werte[zeile])
       if zeile == 0:
-         oeffne.write("["+werte[zeile]+"]\n")
+         werte[zeile] = ("["+werte[zeile]+"]")
       elif zeile == 2:
          werte[zeile] = werte[zeile].encode('utf-8')
          werte[zeile] = base64.b64encode(werte[zeile])
          werte[zeile] = werte[zeile].decode('utf-8')
-         oeffne.write(werte[zeile] +'\n')
+#         oeffne.write(werte[zeile] +'\n')
 #         cr = base64.b64decode(cr)
 #         print (cr)
 #         cr = cr.decode('utf-8')
 #         print (cr)
-      else:
-         oeffne.write(werte[zeile]+"\n")
+      oeffne.write(werte[zeile]+"\n")
 
    oeffne.close()
    
@@ -37,6 +36,10 @@ def config_lesen():
     zeilenzaehler = 0
     for zeile in oeffne:
       werte.append(zeile.strip())
+      if zeilenzaehler == 2:
+         werte[zeilenzaehler] = werte[zeilenzaehler].encode('utf-8')
+         werte[zeilenzaehler] = base64.b64decode(werte[zeilenzaehler])
+         werte[zeilenzaehler] = werte[zeilenzaehler].decode('utf-8')
       print (werte[zeilenzaehler])
       zeilenzaehler = zeilenzaehler + 1
     oeffne.close()
@@ -49,12 +52,14 @@ def liesein():
    master = Tk()
 # ueber der Array beschriftung wird die erste Zeile definiert
    beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
+   vorgabe = ['config', 'j.leimbach', 'GEHEIM', '10.22.10.1']
 # Initialisierung lokaler Array: eingabefelder
    eingabefeld = []
    for i in range(len(beschriftung)):
       Label(master, text=beschriftung[i]).grid(row=i)
       eingabefeld.append(Entry(master))
       eingabefeld[i].grid(row=i, column=3)
+      eingabefeld[i].insert(10,vorgabe[i])
 # Festlegung der notwendigen Buttons
 # Erster Button: weiter führt das Programm aus ohne Werte zu speichern
    Button(master, text='weiter',
@@ -76,5 +81,5 @@ def liesein():
 weiter = liesein()
 
 print("am ende")
-for i in range(len(weiter)):
-   print((weiter[i].get()))
+#for i in range(len(weiter)):
+#   print((weiter[i].get()))
