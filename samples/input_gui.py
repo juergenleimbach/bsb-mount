@@ -1,10 +1,22 @@
 # Initialisieren der grafischen Elemente
 from tkinter import *
+from pathlib import Path
 import base64
-import time
+
+def config_new(sichern):
+   file = '../config/config.dat'
+   oeffne = open(file,"w")
+   for zeile in range(len(sichern)):
+      if zeile == 0:
+         sichern[zeile] = ("["+sichern[zeile]+"]")
+      elif zeile == 2:
+         sichern[zeile] = sichern[zeile].encode('utf-8')
+         sichern[zeile] = base64.b64encode(sichern[zeile])
+         sichern[zeile] = sichern[zeile].decode('utf-8')
+      oeffne.write(sichern[zeile]+"\n")
+   oeffne.close()
 
 # Funktion zum Speichern der eingegebenen Werte in einer Datei
-# (bisher: print als ersatz)
 # Wird innerhalb der Funktion liesein() aufgerufen,
 # liesein() wird hier nicht beendet
 def config_speichern(sichern):
@@ -20,13 +32,7 @@ def config_speichern(sichern):
          werte[zeile] = werte[zeile].encode('utf-8')
          werte[zeile] = base64.b64encode(werte[zeile])
          werte[zeile] = werte[zeile].decode('utf-8')
-#         oeffne.write(werte[zeile] +'\n')
-#         cr = base64.b64decode(cr)
-#         print (cr)
-#         cr = cr.decode('utf-8')
-#         print (cr)
       oeffne.write(werte[zeile]+"\n")
-
    oeffne.close()
    
 def config_lesen():
@@ -50,9 +56,26 @@ def config_lesen():
 def liesein():
 # Fenster erzeugen
    master = Tk()
+   master.title('mount drive')
+   master.geometry('350x120')
+# Rahmen Radiobutton
+   frameRadiobutton = Frame(master=master)
+   frameRadiobutton.place(x=260, y=3, width=110, height=80)
+   auswahl = StringVar()
+   radiobutton1 = Radiobutton(master=frameRadiobutton, anchor='w', text='Schüler', value = 'shome', variable = auswahl)
+   radiobutton1.place(x=5, y=5, width=100, height=20)
+   radiobutton2 = Radiobutton(master=frameRadiobutton, anchor='w', text='Lehrer', value = 'lhome', variable = auswahl)
+   radiobutton2.place(x=5, y=25, width=100, height=20)
+   radiobutton1.select()
+
 # ueber der Array beschriftung wird die erste Zeile definiert
    beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
-   vorgabe = ['config', 'j.leimbach', 'GEHEIM', '10.22.10.1']
+   pruefe = Path('../config/config.dat')
+   if pruefe.is_file():
+      vorgabe = config_lesen()
+   else:
+      werte = ['config', 'j.leimbach', 'GEHEIM', '10.22.10.1']
+      config_new(werte)
 # Initialisierung lokaler Array: eingabefelder
    eingabefeld = []
    for i in range(len(beschriftung)):
@@ -68,13 +91,12 @@ def liesein():
 # Funktionsaufruf lesen
 # Aufruf noch offen - füllt Tabelle mit einer vorgegebenen Konfiguration
    Button(master, text='lesen', command=config_lesen).grid(row=i+1,column=1)
-#             command=(lambda ein=eingabefeld:
-#                      config_speichern(ein))).grid(row=i+1,column=1)
 # Funktionsaufruf: config_speichern
 # Aufruf über lambda, damit die Werte der Eingabefelder übergeben werden können
    Button(master, text='speichern',
              command=(lambda ein=eingabefeld:
                       config_speichern(ein))).grid(row=i+1,column=3)
+   
    master.mainloop()
    return eingabefeld
 
