@@ -1,9 +1,0 @@
-# [*****] ist Anfang eines neuen Konfigurationsblocks
-# * steht für beliebige Zeichenfolge / Name des Blocks
-# mit # können beliebige, einzeilige Kommentare eigebaut werden.
-# [ für Block und # als Kommentarzeichen MÜSSEN am Zeilenanfang stehen.
-# wird onfig.dat manuell bearbeitet, muss beim Speichern ansi als
-# Codierung ausgewählt werden. (empfohlener Editor: Notepad++)
-[config]
-Name: USERNAME
-Pass: PASSWORD

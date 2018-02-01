@@ -3,6 +3,8 @@ from tkinter import *
 from pathlib import Path
 import base64
 
+# Speichern / neu-erstellen der Konfigurationsdatei
+# wird nur gebraucht, wenn Datei nicht existiert
 def config_new(sichern):
    file = '../config/config.dat'
    oeffne = open(file,"w")
@@ -25,7 +27,6 @@ def config_speichern(sichern):
    werte = []
    for zeile in range(len(sichern)):
       werte.append(sichern[zeile].get())
-#      print (werte[zeile])
       if zeile == 0:
          werte[zeile] = ("["+werte[zeile]+"]")
       elif zeile == 2:
@@ -35,18 +36,23 @@ def config_speichern(sichern):
       oeffne.write(werte[zeile]+"\n")
    oeffne.close()
    
+# Einlesen der Werte aus einer existierenden Datei
 def config_lesen():
     file = '../config/config.dat'
-    oeffne = open(file)
+    oeffne = open(file,"r")
     werte = []
     zeilenzaehler = 0
+    hilfsspeicher = ''
     for zeile in oeffne:
       werte.append(zeile.strip())
+      if zeilenzaehler == 0:
+         for zeichen in range(1, len(werte[zeilenzaehler])-1):
+            hilfsspeicher = hilfsspeicher + werte[zeilenzaehler][zeichen]
+         werte[0] = hilfsspeicher
       if zeilenzaehler == 2:
          werte[zeilenzaehler] = werte[zeilenzaehler].encode('utf-8')
          werte[zeilenzaehler] = base64.b64decode(werte[zeilenzaehler])
          werte[zeilenzaehler] = werte[zeilenzaehler].decode('utf-8')
-      print (werte[zeilenzaehler])
       zeilenzaehler = zeilenzaehler + 1
     oeffne.close()
     return (werte)
@@ -71,18 +77,24 @@ def liesein():
 # ueber der Array beschriftung wird die erste Zeile definiert
    beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
    pruefe = Path('../config/config.dat')
-   if pruefe.is_file():
-      vorgabe = config_lesen()
-   else:
+# es wird geprüft, ob eine Konfigurationsdatei existiert
+# wenn ja wird sie verwendet, wenn nein wird sie angelgt
+   if not pruefe.is_file():
       werte = ['config', 'j.leimbach', 'GEHEIM', '10.22.10.1']
       config_new(werte)
 # Initialisierung lokaler Array: eingabefelder
+# Vorgabewerte (DEFAULTS) stehen in der Datei ../config/config.dat
+   vorgabe = config_lesen()
+   print (vorgabe)
    eingabefeld = []
    for i in range(len(beschriftung)):
       Label(master, text=beschriftung[i]).grid(row=i)
       eingabefeld.append(Entry(master))
       eingabefeld[i].grid(row=i, column=3)
-      eingabefeld[i].insert(10,vorgabe[i])
+      if i == 2:
+         eingabefeld[i].config(show="*")
+#      else:
+      eingabefeld[i].insert(25,vorgabe[i])
 # Festlegung der notwendigen Buttons
 # Erster Button: weiter führt das Programm aus ohne Werte zu speichern
    Button(master, text='weiter',
@@ -102,6 +114,13 @@ def liesein():
 
 weiter = liesein()
 
+for i in range(len(weiter)):
+   weiter[i] = weiter[i].get()
 print("am ende")
-#for i in range(len(weiter)):
-#   print((weiter[i].get()))
+#heinz = ''
+for i in range(len(weiter)):
+#   if i == 0:
+#      for zeichen in range(1, len(weiter[i])-1):
+#         heinz = heinz + weiter[i][zeichen]
+#      weiter[0] = heinz
+   print (i, weiter[i])
