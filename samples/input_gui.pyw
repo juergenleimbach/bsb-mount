@@ -2,11 +2,18 @@
 from tkinter import *
 from pathlib import Path
 import base64
+import win32wnet
+import win32netcon
+
+
+# Globale Konstanten und Variablen
+file = '../config/config.dat'
+beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
+vorgabe = ['config', 'Anmeldename', 'GEHEIM', '10.22.10.1']
 
 # Speichern / neu-erstellen der Konfigurationsdatei
 # wird nur gebraucht, wenn Datei nicht existiert
 def config_new(sichern):
-   file = '../config/config.dat'
    oeffne = open(file,"w")
    for zeile in range(len(sichern)):
       if zeile == 0:
@@ -22,7 +29,6 @@ def config_new(sichern):
 # Wird innerhalb der Funktion liesein() aufgerufen,
 # liesein() wird hier nicht beendet
 def config_speichern(sichern):
-   file = '../config/config.dat'
    oeffne = open(file,"w")
    werte = []
    for zeile in range(len(sichern)):
@@ -38,7 +44,6 @@ def config_speichern(sichern):
    
 # Einlesen der Werte aus einer existierenden Datei
 def config_lesen():
-    file = '../config/config.dat'
     oeffne = open(file,"r")
     werte = []
     zeilenzaehler = 0
@@ -74,18 +79,7 @@ def liesein():
    radiobutton2.place(x=5, y=25, width=100, height=20)
    radiobutton1.select()
 
-# ueber der Array beschriftung wird die erste Zeile definiert
-   beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
-   pruefe = Path('../config/config.dat')
-# es wird geprüft, ob eine Konfigurationsdatei existiert
-# wenn ja wird sie verwendet, wenn nein wird sie angelgt
-   if not pruefe.is_file():
-      werte = ['config', 'j.leimbach', 'GEHEIM', '10.22.10.1']
-      config_new(werte)
-# Initialisierung lokaler Array: eingabefelder
-# Vorgabewerte (DEFAULTS) stehen in der Datei ../config/config.dat
-   vorgabe = config_lesen()
-   print (vorgabe)
+# Malen des Fensters mit Beschriftung und Werten
    eingabefeld = []
    for i in range(len(beschriftung)):
       Label(master, text=beschriftung[i]).grid(row=i)
@@ -93,7 +87,6 @@ def liesein():
       eingabefeld[i].grid(row=i, column=3)
       if i == 2:
          eingabefeld[i].config(show="*")
-#      else:
       eingabefeld[i].insert(25,vorgabe[i])
 # Festlegung der notwendigen Buttons
 # Erster Button: weiter führt das Programm aus ohne Werte zu speichern
@@ -112,15 +105,37 @@ def liesein():
    master.mainloop()
    return eingabefeld
 
+pruefe = Path(file)
+# es wird geprüft, ob eine Konfigurationsdatei existiert
+# wenn ja wird sie verwendet, wenn nein wird sie angelgt
+if not pruefe.is_file():
+   config_new(vorgabe)
+# Initialisierung lokaler Array: eingabefelder
+# Vorgabewerte (DEFAULTS) stehen in der Datei ../config/config.dat
+
+with open(file) as oeffne:
+    oeffne.seek(0)
+    first_char = oeffne.read(1) #get the first character
+    if not first_char:
+        config_new(vorgabe) 
+
+oeffne.close()
+
+vorgabe = config_lesen()
+
 weiter = liesein()
 
 for i in range(len(weiter)):
    weiter[i] = weiter[i].get()
 print("am ende")
-#heinz = ''
 for i in range(len(weiter)):
-#   if i == 0:
-#      for zeichen in range(1, len(weiter[i])-1):
-#         heinz = heinz + weiter[i][zeichen]
-#      weiter[0] = heinz
    print (i, weiter[i])
+home = {}
+home["letter"] = r'h:'
+weiter[3] = '\\\\' + weiter[3] + '\\' + weiter[1] + '$'
+
+print (home)
+
+win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+                             home["letter"], weiter[3], None,
+                             weiter[1], weiter[2])
