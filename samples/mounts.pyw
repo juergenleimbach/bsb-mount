@@ -16,6 +16,12 @@ def config_windows():
       os.makedirs(directory)
    return directory
 
+def config_osx():
+   directory = "/Users/"+aktualuser+"/Documents/bsbebra-mounts"
+   if not os.path.exists(directory):
+      os.makedirs(directory)
+   return directory
+
 # Globale Konstanten und Variablen
 # Unterscheiden nach OSX und Windows
 beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
@@ -24,6 +30,8 @@ osstring = platform.platform()
 aktualuser = getpass.getuser()
 if osstring[0] == "W":
    file = config_windows()
+else:
+   file = config_osx()
 
 file = file+'/config.dat'
 
