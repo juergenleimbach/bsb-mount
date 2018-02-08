@@ -2,14 +2,30 @@
 from tkinter import *
 from pathlib import Path
 import base64
-import win32wnet
-import win32netcon
+import platform
+import getpass
+import os
 
+
+
+def config_windows():
+   import win32wnet
+   import win32netcon
+   directory = "c:/Users/"+aktualuser+"/Documents/bsbebra-mounts"
+   if not os.path.exists(directory):
+      os.makedirs(directory)
+   return directory
 
 # Globale Konstanten und Variablen
-file = '../config/config.dat'
+# Unterscheiden nach OSX und Windows
 beschriftung = ['Konfiguration', 'Anmeldename', 'Passwort', 'Server/Freigabe']
 vorgabe = ['config', 'Anmeldename', 'GEHEIM', '10.22.10.1']
+osstring = platform.platform()
+aktualuser = getpass.getuser()
+if osstring[0] == "W":
+   file = config_windows()
+
+file = file+'/config.dat'
 
 # Speichern / neu-erstellen der Konfigurationsdatei
 # wird nur gebraucht, wenn Datei nicht existiert
@@ -136,6 +152,6 @@ weiter[3] = '\\\\' + weiter[3] + '\\' + weiter[1] + '$'
 
 print (home)
 
-win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
-                             home["letter"], weiter[3], None,
-                             weiter[1], weiter[2])
+#win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+#                             home["letter"], weiter[3], None,
+#                             weiter[1], weiter[2])
