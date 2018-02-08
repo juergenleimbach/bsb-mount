@@ -2,8 +2,9 @@
 from tkinter import *
 from pathlib import Path
 import base64
-import win32wnet
-import win32netcon
+#import win32wnet
+#import win32netcon
+import os
 
 
 # Globale Konstanten und Variablen
@@ -136,6 +137,10 @@ weiter[3] = '\\\\' + weiter[3] + '\\' + weiter[1] + '$'
 
 print (home)
 
-win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
-                             home["letter"], weiter[3], None,
-                             weiter[1], weiter[2])
+#win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+#                             home["letter"], weiter[3], None,
+#                             weiter[1], weiter[2])
+directory = "/Users/j.leimbach/home"
+if not os.path.exists(directory): os.makedirs(directory)
+#os.system("mount_smbfs //schule.bs-bebra.de;j.leimbach:jliJL123d@10.22.10.1/j.leimbach$ /Users/j.leimbach/home")
+os.system("mount_smbfs //j.leimbach:jliJL123@10.22.10.1/j.leimbach$ /Users/j.leimbach/home")
