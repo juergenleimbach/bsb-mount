@@ -18,12 +18,12 @@ class MyFrame(wx.Frame):
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.SetSize((250, 411))
-        self.text_ctrl_1 = wx.TextCtrl(self, wx.ID_ANY, "")
+        self.text_ctrl_1 = wx.TextCtrl(self, wx.ID_ANY, "config")
         self.button_3 = wx.Button(self, wx.ID_ANY, "Laden")
-        self.text_ctrl_2 = wx.TextCtrl(self, wx.ID_ANY, "")
-        self.text_ctrl_3 = wx.TextCtrl(self, wx.ID_ANY, "")
-        self.text_ctrl_4 = wx.TextCtrl(self, wx.ID_ANY, "")
-        self.text_ctrl_5 = wx.TextCtrl(self, wx.ID_ANY, "")
+        self.text_ctrl_2 = wx.TextCtrl(self, wx.ID_ANY, "Anmeldename")
+        self.text_ctrl_3 = wx.TextCtrl(self, wx.ID_ANY, "Passwort")
+        self.text_ctrl_4 = wx.TextCtrl(self, wx.ID_ANY, "Freigabe")
+        self.text_ctrl_5 = wx.TextCtrl(self, wx.ID_ANY, "Schüler")
         self.button_2 = wx.Button(self, wx.ID_ANY, "Weiter")
 
         self.__set_properties()
@@ -32,7 +32,7 @@ class MyFrame(wx.Frame):
 
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
-        self.SetTitle("frame")
+        self.SetTitle("Anmeldung")
         # end wxGlade
 
     def __do_layout(self):
@@ -71,4 +71,5 @@ class MyApp(wx.App):
 
 # end of class MyApp
 app = MyApp(0)
+# print (self.text_ctrl_1)
 app.MainLoop()
