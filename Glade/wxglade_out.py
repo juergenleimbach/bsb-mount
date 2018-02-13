@@ -18,6 +18,7 @@ class MyFrame(wx.Frame):
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.SetSize((250, 411))
+<<<<<<< HEAD
         self.text_ctrl_1 = wx.TextCtrl(self, wx.ID_ANY, "")
         self.button_1 = wx.Button(self, wx.ID_ANY, "Laden")
         self.text_ctrl_2 = wx.TextCtrl(self, wx.ID_ANY, "")
@@ -27,6 +28,15 @@ class MyFrame(wx.Frame):
         self.button_0 = wx.Button(self, wx.ID_ANY, "Weiter")
 #Mit folgender Zeile wird der weiter-buton an die Funktion weiterEvent() gekoppelt
         self.button_0.Bind(wx.EVT_BUTTON, self.weiterEvent)
+=======
+        self.text_ctrl_1 = wx.TextCtrl(self, wx.ID_ANY, "config")
+        self.button_3 = wx.Button(self, wx.ID_ANY, "Laden")
+        self.text_ctrl_2 = wx.TextCtrl(self, wx.ID_ANY, "Anmeldename")
+        self.text_ctrl_3 = wx.TextCtrl(self, wx.ID_ANY, "Passwort")
+        self.text_ctrl_4 = wx.TextCtrl(self, wx.ID_ANY, "Freigabe")
+        self.text_ctrl_5 = wx.TextCtrl(self, wx.ID_ANY, "Schüler")
+        self.button_2 = wx.Button(self, wx.ID_ANY, "Weiter")
+>>>>>>> a956a5940707efdb8d0147b820e5429b08a3ca7f
 
         self.__set_properties()
         self.__do_layout()
@@ -34,7 +44,7 @@ class MyFrame(wx.Frame):
 
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
-        self.SetTitle("frame")
+        self.SetTitle("Anmeldung")
         # end wxGlade
 
     def __do_layout(self):
@@ -71,8 +81,14 @@ class MyFrame(wx.Frame):
 
 # end of class MyFrame
 
+<<<<<<< HEAD
 # Minimum um ein Fenster darzustellen
 app = wx.App(0)
 frame = MyFrame(None)
 frame.Show()
+=======
+# end of class MyApp
+app = MyApp(0)
+# print (self.text_ctrl_1)
+>>>>>>> a956a5940707efdb8d0147b820e5429b08a3ca7f
 app.MainLoop()
