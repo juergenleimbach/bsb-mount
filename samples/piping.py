@@ -2,15 +2,23 @@ import subprocess
 import platform
 
 
-hostname = "10.22.10.8"
+hostname = "10.22.10.1"
 osstring = platform.platform()
 if osstring[0] == "W":
-    output = subprocess.Popen(["ping.exe",'-n','1',hostname],
-                              stdout = subprocess.PIPE).communicate()[0]
+    os_command = '-n'
+    os_error = rb'nicht erreichbar'
 
-    print(output)
+if osstring[0] == "D":
+    os_command = '-c'
+    os_error = rb'Unreachable'
 
-    if (rb'nicht erreichbar' in output):
-        print("Offline")
-    else:
-        print ('Online')
+print ('Prüfen ob angegebener Rechner existiert.')
+output = subprocess.Popen(["ping",os_command,'1',hostname],
+                          stdout = subprocess.PIPE).communicate()[0]
+
+#print (output)
+
+if (os_error in output):
+    print ('Host nicht gefunden')
+else:
+    print ('Host gefunden')
