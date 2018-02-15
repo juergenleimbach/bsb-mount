@@ -156,6 +156,7 @@ for i in range(len(weiter)):
    print (i, weiter[i])
 home = {}
 home["letter"] = r'h:'
+print (weiter)
 weiter[3] = '\\\\' + weiter[3] + '\\' + weiter[1] + '$'
 
 print (home)

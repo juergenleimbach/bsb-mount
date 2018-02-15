@@ -10,6 +10,8 @@ import platform
 import getpass
 import os
 import subprocess
+import win32wnet
+import win32netcon
 
 #----Fenster als Klasse zeichnen
 class MyFrame(wx.Frame):
@@ -89,14 +91,17 @@ class MyFrame(wx.Frame):
         vorgabe[4] = self.text_ctrl_5.GetValue()
         home =  r'h:'
         if vorgabe[3] == 'SCHULE':
-            server_ip = '10.22.10.1'
-            is_up = True
+            vorgabe[3] = '10.22.10.1'
+        output = subprocess.Popen(["ping",os_werte[1],'1',vorgabe[3]], stdout = subprocess.PIPE).communicate()[0]
+        if (os_werte[2] in output):
+            print ('Host nicht gefunden')
         else:
-            server_ip = vorgabe[3]
-            
-#        win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
-#                                     home, weiter[3], None,
-#                                     weiter[1], weiter[2])        
+            print ('Host gefunden')
+        vorgabe[3] = '\\\\' + vorgabe[3] + '\\' + vorgabe[1] + '$'
+        print (vorgabe[3])
+        win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+                                     home, vorgabe[3], None,
+                                     vorgabe[1], vorgabe[2])        
         print (vorgabe, home)
 
     def loadEvent(self, event):
@@ -117,18 +122,18 @@ class MyFrame(wx.Frame):
 # end of class MyFrame
 # Allgemeine Funktionen
 def config_windows():
-   import win32wnet
-   import win32netcon
-   directory = "c:/Users/"+aktualuser+"/Documents/bsbebra-mounts"
-   if not os.path.exists(directory):
-      os.makedirs(directory)
-   return directory
+   os_spezifisch = ["c:/Users/"+aktualuser+"/Documents/bsbebra-mounts", '-n', rb'nicht erreichbar']
+   if not os.path.exists(os_spezifisch[0]):
+      os.makedirs(os_spezifisch[0])
+
+   return os_spezifisch
 
 def config_osx():
-   directory = "/Users/"+aktualuser+"/Documents/bsbebra-mounts"
-   if not os.path.exists(directory):
-      os.makedirs(directory)
-   return directory
+   os_spezifisch = ["/Users/"+aktualuser+"/Documents/bsbebra-mounts", '-c', rb'Unreachable']
+   if not os.path.exists(os_spezifisch[0]):
+      os.makedirs(os_spezifisch[0])
+      
+   return os_spezifisch
 
 def config_lesen():
     oeffne = open(file,"r")
@@ -183,15 +188,15 @@ vorgabe = ['config', 'Anmeldename', 'GEHEIM', 'SCHULE', 'Klasse/Gruppe']
 osstring = platform.platform()
 aktualuser = getpass.getuser()
 if osstring[0] == "W":
-   file = config_windows()
-   pingchar= '-n'
+   os_werte = config_windows()
 else:
-   file = config_osx()
-   pingchar = '-c'
+   os_werte = config_osx()
+
+print (os_werte)
 
 # es wird geprüft, ob eine Konfigurationsdatei existiert
 # wenn ja wird sie verwendet, wenn nein wird sie angelgt
-file = file+'/config.dat'
+file = os_werte[0]+'/config.dat'
 pruefe = Path(file)
 if not pruefe.is_file():
    config_new(vorgabe)
@@ -200,7 +205,8 @@ with open(file) as oeffne:
     first_char = oeffne.read(1)
     if not first_char:
         config_new(vorgabe) 
-#print (file)
+print (file)
+
 # Wenn Datei existiert, wird die gespeicherte oder neu erzeugte
 # Konfiguration zugewiesen
 vorgabe = config_lesen()

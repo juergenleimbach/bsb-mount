@@ -13,8 +13,7 @@ if osstring[0] == "D":
     os_error = rb'Unreachable'
 
 print ('Prüfen ob angegebener Rechner existiert.')
-output = subprocess.Popen(["ping",os_command,'1',hostname],
-                          stdout = subprocess.PIPE).communicate()[0]
+output = subprocess.Popen(["ping",os_command,'1',hostname], stdout = subprocess.PIPE).communicate()[0]
 
 #print (output)
 
