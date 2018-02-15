@@ -10,8 +10,6 @@ import platform
 import getpass
 import os
 import subprocess
-import win32wnet
-import win32netcon
 
 #----Fenster als Klasse zeichnen
 class MyFrame(wx.Frame):
@@ -89,7 +87,6 @@ class MyFrame(wx.Frame):
         vorgabe[2] = self.text_ctrl_3.GetValue()
         vorgabe[3] = self.text_ctrl_4.GetValue()
         vorgabe[4] = self.text_ctrl_5.GetValue()
-        home =  r'h:'
         if vorgabe[3] == 'SCHULE':
             vorgabe[3] = '10.22.10.1'
         output = subprocess.Popen(["ping",os_werte[1],'1',vorgabe[3]], stdout = subprocess.PIPE).communicate()[0]
@@ -97,12 +94,9 @@ class MyFrame(wx.Frame):
             print ('Host nicht gefunden')
         else:
             print ('Host gefunden')
-        vorgabe[3] = '\\\\' + vorgabe[3] + '\\' + vorgabe[1] + '$'
-        print (vorgabe[3])
-        win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
-                                     home, vorgabe[3], None,
-                                     vorgabe[1], vorgabe[2])        
-        print (vorgabe, home)
+        print (osstring)
+        if osstring[0] == "W":
+            mounting_windows(vorgabe)
 
     def loadEvent(self, event):
         print ('Noch zu implementieren')
@@ -121,12 +115,31 @@ class MyFrame(wx.Frame):
 
 # end of class MyFrame
 # Allgemeine Funktionen
-def config_windows():
-   os_spezifisch = ["c:/Users/"+aktualuser+"/Documents/bsbebra-mounts", '-n', rb'nicht erreichbar']
-   if not os.path.exists(os_spezifisch[0]):
-      os.makedirs(os_spezifisch[0])
 
-   return os_spezifisch
+def mounting_windows(vorgabe):
+    import win32wnet
+    import win32netcon
+    home =  r'h:'
+    vorgabe[3] = '\\\\' + vorgabe[3] + '\\' + vorgabe[1] + '$'
+    print (vorgabe[3])
+    win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+                                 home, vorgabe[3], None,
+                                 vorgabe[1], vorgabe[2])        
+    print (vorgabe, home)
+
+
+    print ('WINDOWS spezifisches')
+    
+def mounting_osx(vorgabe):
+    print ('OSX spezifisches')
+
+def config_windows():
+    import win32wnet
+    import win32netcon
+    os_spezifisch = ["c:/Users/"+aktualuser+"/Documents/bsbebra-mounts", '-n', rb'nicht erreichbar']
+    if not os.path.exists(os_spezifisch[0]):
+        os.makedirs(os_spezifisch[0])
+    return os_spezifisch
 
 def config_osx():
    os_spezifisch = ["/Users/"+aktualuser+"/Documents/bsbebra-mounts", '-c', rb'Unreachable']
