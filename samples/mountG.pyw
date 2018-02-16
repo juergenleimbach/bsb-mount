@@ -38,10 +38,10 @@ class MyFrame(wx.Frame):
         self.text_ctrl_3 = wx.TextCtrl(self, wx.ID_ANY, vorgabe[2], style=wx.TE_PASSWORD)
         self.text_ctrl_4 = wx.TextCtrl(self, wx.ID_ANY, vorgabe[3])
         self.text_ctrl_5 = wx.TextCtrl(self, wx.ID_ANY, vorgabe[4])
-        self.button_0 = wx.Button(self, wx.ID_ANY, "Weiter")
-        self.button_1 = wx.Button(self, wx.ID_ANY, "Speichern")
-        self.button_0.Bind(wx.EVT_BUTTON, self.weiterEvent)
-        self.button_1.Bind(wx.EVT_BUTTON, self.saveEvent)
+        self.button_0 = wx.Button(self, wx.ID_ANY, "Verbinden")
+        self.button_1 = wx.Button(self, wx.ID_ANY, "Trennen")
+        self.button_0.Bind(wx.EVT_BUTTON, self.verbindenEvent)
+        self.button_1.Bind(wx.EVT_BUTTON, self.trennenEvent)
         self.radio_box_1 = wx.RadioBox(self, wx.ID_ANY, "", choices=["Lehrer", u"Sch\u00fcler", "Abitur"], majorDimension=1, style=wx.RA_SPECIFY_COLS)
         self.__set_properties()
         self.__do_layout()
@@ -80,7 +80,7 @@ class MyFrame(wx.Frame):
         self.Layout()
         # end wxGlade
 # hier gehört zum großen Teil das Programm hin        
-    def weiterEvent(self, event):
+    def verbindenEvent(self, event):
         #vorgabe = config_lesen()
         vorgabe[0] = self.text_ctrl_1.GetValue()
         vorgabe[1] = self.text_ctrl_2.GetValue()
@@ -96,7 +96,13 @@ class MyFrame(wx.Frame):
             print ('Host gefunden')
         print (osstring)
         if osstring[0] == "W":
-            mounting_windows(vorgabe)
+            mounting_windows(vorgabe)     
+
+    def trennenEvent(self,event):
+        import win32wnet
+        import win32netcon
+        if osstring[0] == "W":
+            win32wnet.WNetCancelConnection2('h:', 0, 0)
 
     def loadEvent(self, event):
         print ('Noch zu implementieren')
@@ -121,14 +127,9 @@ def mounting_windows(vorgabe):
     import win32netcon
     home =  r'h:'
     vorgabe[3] = '\\\\' + vorgabe[3] + '\\' + vorgabe[1] + '$'
-    print (vorgabe[3])
     win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
                                  home, vorgabe[3], None,
                                  vorgabe[1], vorgabe[2])        
-    print (vorgabe, home)
-
-
-    print ('WINDOWS spezifisches')
     
 def mounting_osx(vorgabe):
     print ('OSX spezifisches')
