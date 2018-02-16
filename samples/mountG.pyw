@@ -129,7 +129,8 @@ def mounting_windows(vorgabe):
     vorgabe[3] = '\\\\' + vorgabe[3] + '\\' + vorgabe[1] + '$'
     win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
                                  home, vorgabe[3], None,
-                                 vorgabe[1], vorgabe[2])        
+                                 vorgabe[1], vorgabe[2])
+    print (aktualuser)
     
 def mounting_osx(vorgabe):
     print ('OSX spezifisches')
