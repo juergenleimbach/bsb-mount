@@ -103,6 +103,8 @@ class MyFrame(wx.Frame):
         import win32netcon
         if osstring[0] == "W":
             win32wnet.WNetCancelConnection2('h:', 0, 0)
+            win32wnet.WNetCancelConnection2('k:', 0, 0)
+            win32wnet.WNetCancelConnection2('t:', 0, 0)
 
     def loadEvent(self, event):
         print ('Noch zu implementieren')
@@ -122,15 +124,53 @@ class MyFrame(wx.Frame):
 # end of class MyFrame
 # Allgemeine Funktionen
 
+def laufwerkszuteilung_windows():
+    import win32api
+    alphabet = map(chr, range(ord('A'), ord('Z')+1))
+    nicht_nutzen = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    bevorzugt = ['H', 'K', 'T']
+    drives = win32api.GetLogicalDriveStrings()
+    drives = drives.split('\000')[:-1]
+    benutzt = [d[0] for d in drives]
+    unbenutzt = list(sorted(set(alphabet) - set(benutzt) - set(nicht_nutzen)))
+    if bevorzugt[0] in unbenutzt:
+        rueck = ['H']
+    else:
+        rueck = [unbenutzt[0]]
+    block = ['H', 'I', 'J']
+    unbenutzt = list(sorted(set(unbenutzt) - set(block)))
+    if bevorzugt[1] in unbenutzt:
+        rueck.append('K')
+    else:
+        rueck.append(unbenutzt[0])
+    block = ['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S']
+    unbenutzt = list(sorted(set(unbenutzt) - set(block)))
+    if bevorzugt[2] in unbenutzt:
+        rueck.append('T')
+    else:
+        rueck.append(unbenutzt[0])
+    
+    return rueck
+
 def mounting_windows(vorgabe):
     import win32wnet
     import win32netcon
-    home =  r'h:'
-    vorgabe[3] = '\\\\' + vorgabe[3] + '\\' + vorgabe[1] + '$'
+    frei = laufwerkszuteilung_windows()
+    home =  frei[0] + ':'
+    mount_home = '\\\\' + vorgabe[3] + '\\' + vorgabe[1] + '$'
     win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
-                                 home, vorgabe[3], None,
+                                 home, mount_home, None,
                                  vorgabe[1], vorgabe[2])
-    print (aktualuser)
+    klassen = frei[1] + ':'
+    mount_klassen = '\\\\' + vorgabe[3] + '\\' + 'BSBEBRA_Classroot' + '$'
+    win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+                                 klassen, mount_klassen, None,
+                                 vorgabe[1], vorgabe[2])
+    lehrer = frei[2] + ':'
+    mount_lehrer = '\\\\' + vorgabe[3] + '\\' + 'BSBEBRA_Tausch' + '$'
+    win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+                                 lehrer, mount_lehrer, None,
+                                 vorgabe[1], vorgabe[2])
     
 def mounting_osx(vorgabe):
     print ('OSX spezifisches')
