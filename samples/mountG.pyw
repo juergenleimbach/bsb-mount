@@ -89,12 +89,12 @@ class MyFrame(wx.Frame):
         vorgabe[4] = self.text_ctrl_5.GetValue()
         if vorgabe[3] == 'SCHULE':
             vorgabe[3] = '10.22.10.1'
-        output = subprocess.Popen(["ping",os_werte[1],'1',vorgabe[3]], stdout = subprocess.PIPE).communicate()[0]
-        if (os_werte[2] in output):
-            print ('Host nicht gefunden')
-        else:
-            print ('Host gefunden')
-        print (osstring)
+        #output = subprocess.Popen(["ping",os_werte[1],'1',vorgabe[3]], stdout = subprocess.PIPE).communicate()[0]
+        #if (os_werte[2] in output):
+        #    print ('Host nicht gefunden')
+        #else:
+        #    print ('Host gefunden')
+        #print (osstring)
         if osstring[0] == "W":
             mounting_windows(vorgabe)     
 
