@@ -9,7 +9,6 @@ import base64
 import platform
 import getpass
 import os
-import subprocess
 
 #----Fenster als Klasse zeichnen
 class MyFrame(wx.Frame):
@@ -89,14 +88,10 @@ class MyFrame(wx.Frame):
         vorgabe[4] = self.text_ctrl_5.GetValue()
         if vorgabe[3] == 'SCHULE':
             vorgabe[3] = '10.22.10.1'
-        #output = subprocess.Popen(["ping",os_werte[1],'1',vorgabe[3]], stdout = subprocess.PIPE).communicate()[0]
-        #if (os_werte[2] in output):
-        #    print ('Host nicht gefunden')
-        #else:
-        #    print ('Host gefunden')
-        #print (osstring)
         if osstring[0] == "W":
-            mounting_windows(vorgabe)     
+            mounting_windows(vorgabe)
+        if osstring[0] == "D":
+            print (osstring)
 
     def trennenEvent(self,event):
         import win32wnet
@@ -247,8 +242,6 @@ if osstring[0] == "W":
 else:
    os_werte = config_osx()
 
-print (os_werte)
-
 # es wird geprüft, ob eine Konfigurationsdatei existiert
 # wenn ja wird sie verwendet, wenn nein wird sie angelgt
 file = os_werte[0]+'/config.dat'
@@ -260,7 +253,6 @@ with open(file) as oeffne:
     first_char = oeffne.read(1)
     if not first_char:
         config_new(vorgabe) 
-print (file)
 
 # Wenn Datei existiert, wird die gespeicherte oder neu erzeugte
 # Konfiguration zugewiesen
