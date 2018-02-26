@@ -91,7 +91,7 @@ class MyFrame(wx.Frame):
         if osstring[0] == "W":
             mounting_windows(vorgabe)
         if osstring[0] == "D":
-            print (osstring)
+            mounting_osx(vorgabe)
 
     def trennenEvent(self,event):
         import win32wnet
@@ -169,6 +169,19 @@ def mounting_windows(vorgabe):
     
 def mounting_osx(vorgabe):
     print ('OSX spezifisches')
+    print (vorgabe)
+    frei = [vorgabe[1], 'BSBEBRA_Classroot','BSBEBRA_Tausch']
+    nutzerverzeichnis = '/Users/'+aktualuser+'/'+vorgabe[1]
+    if not os.path.exists(nutzerverzeichnis):
+        os.makedirs(nutzerverzeichnis)
+    for verzeichnis in frei:
+        nutzerverzeichnis = '/Users/'+aktualuser+'/'+ vorgabe[1] +'/'+verzeichnis
+        print (nutzerverzeichnis)
+        if not os.path.exists(nutzerverzeichnis):
+            os.makedirs(nutzerverzeichnis)
+        befehl = 'mount_smbfs //'+ vorgabe[1] + ':' + vorgabe[2] + '@10.22.10.1/' + verzeichnis + '$ ' + nutzerverzeichnis + '/' 
+        print (befehl)
+        os.system(befehl)
 
 def config_windows():
     import win32wnet
