@@ -12,7 +12,7 @@ import wx
 # end wxGlade
 
 
-class MyDialog(wx.Dialog):
+class MyDialog(wx.Frame):
     def __init__(self, *args, **kwds):
         # begin wxGlade: MyDialog.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
