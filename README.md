@@ -1,5 +1,5 @@
 # bsb-mount
-Mounting ad-directories as local drives for bs-bebra
+## Mounting ad-directories as local drives for bs-bebra
 
 useage:
 1. create folder
