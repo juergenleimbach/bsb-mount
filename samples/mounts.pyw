@@ -161,6 +161,6 @@ weiter[3] = '\\\\' + weiter[3] + '\\' + weiter[1] + '$'
 
 print (home)
 
-#win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
-#                             home["letter"], weiter[3], None,
-#                             weiter[1], weiter[2])
+win32wnet.WNetAddConnection2(win32netcon.RESOURCETYPE_DISK,
+                             home["letter"], weiter[3], None,
+                             weiter[1], weiter[2])
